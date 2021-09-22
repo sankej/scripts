@@ -6,8 +6,7 @@ AirTcp签到
 
 // const $ = new Env('AirTcp签到')
 const MagicJS = require('./magic')
-// const notify = require('./sendNotify').sendNotify
-const notify = (e) => console.log(e)
+const notify = require('./sendNotify').sendNotify
 const scriptName = 'AirTcp签到'
 const airtcpCookieKey = 'airtcp_cookie'
 
