@@ -336,8 +336,8 @@ function WebGetCurrentInfo(smzdmCookie) {
                 ' 未读消息' +
                 afterNotice
             }
-            title = `${scriptName} - ${nickName} V${afterVIPLevel}`
-            notify(title, `${subTitle}\n${content}`)
+            title = `${nickName} V${afterVIPLevel}`
+            notify(scriptName, `${title}\n${subTitle}\n${content}`)
           }
         }
       } catch (err) {
