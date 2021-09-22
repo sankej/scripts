@@ -6,7 +6,8 @@ AirTcp签到
 
 // const $ = new Env('AirTcp签到')
 const MagicJS = require('./magic')
-const notify = require('./sendNotify').sendNotify
+// const notify = require('./sendNotify').sendNotify
+const notify = (e) => console.log(e)
 const scriptName = 'AirTcp签到'
 const airtcpCookieKey = 'airtcp_cookie'
 
@@ -82,10 +83,11 @@ function getAirTcpTraffic(cookie) {
 ;(async () => {
   try {
     const cookie = magicJS.read(airtcpCookieKey)
+    if (!cookie) return notify(`cookie不存在!`)
     const res = await checkin(cookie)
     const trafficMsg = await getAirTcpTraffic(cookie)
-    notify(`${res}\n${trafficMsg}`)
+    notify(scriptName, `${res}\n${trafficMsg}`)
   } catch (error) {
-    notify(error)
+    notify(scriptName, error)
   }
 })()

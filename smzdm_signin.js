@@ -242,7 +242,7 @@ function WebGetCurrentInfo(smzdmCookie) {
     let smzdmCookie = magicJS.read(smzdmCookieKey)
     if (!!smzdmCookie === false) {
       magicJS.logWarning('没有读取到什么值得买有效cookie，请访问zhiyou.smzdm.com进行登录')
-      notify(`${scriptName}, ❓没有获取到Web端Cookie，请先进行登录。`)
+      notify(scriptName, '❓没有获取到Web端Cookie，请先进行登录。')
     } else {
       try {
         // 查询签到前用户数据
@@ -260,7 +260,7 @@ function WebGetCurrentInfo(smzdmCookie) {
           beforeSilver,
         ] = await WebGetCurrentInfo(smzdmCookie)
         if (!nickName) {
-          notify(`${scriptName}, ❌Cookie过期或接口变化，请尝试重新登录`)
+          notify(scriptName, '❌Cookie过期或接口变化，请尝试重新登录')
           magicJS.done()
         } else {
           let [, , , beforeExp, , beforePrestige] = await WebGetCurrentInfoNewVersion(smzdmCookie)
@@ -337,12 +337,12 @@ function WebGetCurrentInfo(smzdmCookie) {
                 afterNotice
             }
             title = `${scriptName} - ${nickName} V${afterVIPLevel}`
-            notify(`${title}\n${subTitle}\n${content}`)
+            notify(title, `${subTitle}\n${content}`)
           }
         }
       } catch (err) {
         magicJS.logError(`签到出现异常：${err}`)
-        notify(`${scriptName}, ❌签到出现异常，请查阅日志`)
+        notify(scriptName, '❌签到出现异常，请查阅日志')
       }
     }
   }

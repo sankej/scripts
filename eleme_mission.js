@@ -6,7 +6,8 @@ cron 0 10 * * * eleme_mission.js
 
 // const $ = new Env('饿了么领取任务')
 const MagicJS = require('./magic')
-const notify = require('./sendNotify').sendNotify
+// const notify = require('./sendNotify').sendNotify
+const notify = (e) => console.log(e)
 const scriptName = '饿了么'
 const elemeCookieKey = 'eleme_app_cookie'
 const elemeLongitudeKey = 'eleme_app_longitude'
@@ -170,6 +171,6 @@ function AcceptMission(cookie, longitude, latitude, mission_id) {
     }
   }
   // 通知
-  notify(`${scriptName}\n${subTitle}\n${content})`)
+  notify(`${scriptName}\n${subTitle}`, content)
   magicJS.done()
 })()
