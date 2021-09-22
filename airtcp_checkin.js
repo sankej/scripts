@@ -1,5 +1,5 @@
 /*
-cron 10 0 * * * airport_checkin.js
+cron 10 0 * * * airtcp_checkin.js
 AirTcp签到
 
 */
