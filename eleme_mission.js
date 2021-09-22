@@ -170,6 +170,6 @@ function AcceptMission(cookie, longitude, latitude, mission_id) {
     }
   }
   // 通知
-  notify(`${scriptName}\n${subTitle}`, content)
+  notify(`${scriptName}`, `${subTitle}\n${content}`)
   magicJS.done()
 })()

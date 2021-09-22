@@ -158,7 +158,7 @@ function DrawPea(cookie, peaId, longitude, latitude) {
       }
     }
     // 通知
-    notify(`${scriptName}-${subTitle}`, content)
+    notify(scriptName, `${subTitle}\n${content}`)
   }
   magicJS.done()
 })()
