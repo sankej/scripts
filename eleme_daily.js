@@ -15,9 +15,6 @@ const elemeLongitudeKey = 'eleme_app_longitude'
 const elemeLatitudeKey = 'eleme_app_latitude'
 
 let magicJS = MagicJS(scriptName, 'INFO')
-// magicJS.unifiedPushUrl =
-// magicJS.read('eleme_app_unified_push_url') || magicJS.read('magicjs_unified_push_url')
-
 let cookie = magicJS.read(elemeCookieKey)
 
 // 获取待领取的吃货豆列表
@@ -116,7 +113,7 @@ function DrawPea(cookie, peaId, longitude, latitude) {
   })
 }
 
-;(async () => {
+; (async () => {
   if (magicJS.isRequest) {
     if (getCookieRegex.test(magicJS.request.url) && magicJS.request.method == 'GET') {
       GetCookie()

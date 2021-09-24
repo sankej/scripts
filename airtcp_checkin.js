@@ -35,13 +35,12 @@ const checkin = (cookie) => {
     }
 
     magicJS.post(options, (err, response, data) => {
-      if (err) {
+      if (!data.length) {
         magicJS.logError(`签到失败, 请求异常: ${err}`, 'ERROR')
         reject('签到失败，请求异常, 请查阅日志!')
       } else {
         const { msg } = JSON.parse(data)
         magicJS.logInfo(msg)
-        // notify(msg)
         resolve(msg)
       }
     })
@@ -59,7 +58,7 @@ function getAirTcpTraffic(cookie) {
     }
 
     magicJS.get(options, (err, response, data) => {
-      if (err) {
+      if (!data.length) {
         magicJS.logError(`获取流量失败, 请求异常: ${err}`, 'ERROR')
         reject('获取流量失败，请求异常, 请查阅日志!')
       } else {
@@ -72,14 +71,13 @@ function getAirTcpTraffic(cookie) {
         const expirationDate = unescape(data.match(new RegExp('(?=標準套餐節點).*?(?=<)')))
         const msg = `会员时长: ${memberDuration} 天\n剩余流量: ${remainTraffic}TB  ${todayTraffic}\n${expirationDate}`
         magicJS.logInfo(msg)
-        // notify(msg)
         resolve(msg)
       }
     })
   })
 }
 
-;(async () => {
+; (async () => {
   try {
     const cookie = magicJS.read(airtcpCookieKey)
     if (!cookie) return notify(`cookie不存在!`)
