@@ -37,7 +37,7 @@ const storeSession = new StoreSession(apiId)
 
     for (code of shareCodes) {
       await client.sendMessage('JD_ShareCode_Bot', { message: code })
-      await sleep(1)
+      await sleep(3)
     }
 
     // const jobs = shareCodes.map(async (code) => {
