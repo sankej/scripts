@@ -36,7 +36,7 @@ const storeSession = new StoreSession(apiId)
     const shareCodes = getShareCode()
 
     for (code of shareCodes) {
-      await client.sendMessage('zza_jd_notify_bot', { message: '/help' })
+      await client.sendMessage('JD_ShareCode_Bot', { message: code })
       await sleep(1)
     }
 
