@@ -10,40 +10,48 @@ const apiHash = process.env[apiHashKey]
 const storeSession = new StoreSession(apiId)
 
 ;(async () => {
-  console.log('登入Telegram...')
+  try {
+    console.log('登入Telegram...')
 
-  const client = new TelegramClient(storeSession, apiId, apiHash, { connectionRetries: 5 })
+    const client = new TelegramClient(storeSession, apiId, apiHash, { connectionRetries: 5 })
 
-  await client.connect()
+    await client.connect()
 
-  // await client.start({
-  //   phoneNumber: async () => await input.text('number ?'),
-  //   password: async () => await input.text('password?'),
-  //   phoneCode: async () => await input.text('Code ?'),
-  //   onError: (err) => console.log(err),
-  // })
+    // await client.start({
+    //   phoneNumber: async () => await input.text('number ?'),
+    //   password: async () => await input.text('password?'),
+    //   phoneCode: async () => await input.text('Code ?'),
+    //   onError: (err) => console.log(err),
+    // })
 
-  console.log('登入成功')
+    console.log('登入成功')
 
-  const shareCodes = getShareCode()
+    const shareCodes = getShareCode()
 
-  for (code of shareCodes) {
-    await client.sendMessage('zza_jd_notify_bot', { message: '/help' })
-    await sleep(1)
+    for (code of shareCodes) {
+      await client.sendMessage('zza_jd_notify_bot', { message: '/help' })
+      await sleep(1)
+    }
+
+    // const jobs = shareCodes.map(async (code) => {
+    //   await client.sendMessage('zza_jd_notify_bot', { message: code })
+    // })
+
+    // await Promise.all(jobs)
+
+    console.log('发送助力码完成')
+    process.exit(0)
+  } catch (error) {
+    console.log(error)
+    process.exit(0)
   }
-
-  // const jobs = shareCodes.map(async (code) => {
-  //   await client.sendMessage('zza_jd_notify_bot', { message: code })
-  // })
-
-  // await Promise.all(jobs)
-
-  process.exit(0)
 })()
 
 function getShareCode() {
   const child = require('child_process')
-  const res = child.execSync('node zero205_JD_tencent_scf_main_jd_get_share_code.js', { shell: '/bin/zsh' })
+  const res = child.execSync('task zero205_JD_tencent_scf_main_jd_get_share_code.js now', {
+    shell: '/bin/bash',
+  })
   return res.toString().match(new RegExp('^/.*', 'gm'))
 }
 
