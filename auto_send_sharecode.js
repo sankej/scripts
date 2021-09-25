@@ -1,3 +1,10 @@
+/*
+cron 0 9 * * 6 auto_send_sharecode.js
+自动加入助力池
+
+*/
+
+// const $ = new Env('自动加入助力池')
 const { TelegramClient } = require('telegram')
 const { StoreSession } = require('telegram/sessions')
 const input = require('input') // npm i input
