@@ -1,5 +1,5 @@
 /*
-cron 10 0 * * * airtcp_checkin.js
+cron 20 0 * * * airtcp_checkin.js
 AirTcp签到
 
 */
@@ -77,7 +77,7 @@ function getAirTcpTraffic(cookie) {
   })
 }
 
-; (async () => {
+;(async () => {
   try {
     const cookie = magicJS.read(airtcpCookieKey)
     if (!cookie) return notify(`cookie不存在!`)

@@ -1,5 +1,5 @@
 /*
-cron 10 0 * * * eleme_daily.js
+cron 20 0 * * * eleme_daily.js
 饿了么领取吃货豆
 
 */
@@ -113,7 +113,7 @@ function DrawPea(cookie, peaId, longitude, latitude) {
   })
 }
 
-; (async () => {
+;(async () => {
   if (magicJS.isRequest) {
     if (getCookieRegex.test(magicJS.request.url) && magicJS.request.method == 'GET') {
       GetCookie()
