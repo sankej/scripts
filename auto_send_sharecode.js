@@ -1,5 +1,5 @@
 /*
-cron 0 9 * * 6 auto_send_sharecode.js
+cron 0 21 * * 6 auto_send_sharecode.js
 自动加入助力池
 
 */
