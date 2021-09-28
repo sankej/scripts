@@ -24,11 +24,11 @@ let readTimes = $.getdata('readtime_zq')
 //声明部分
 let rotaryscore = 0,
   doublerotary = 0
-let cookieArr = [],
+let cookieArr = [cookieYouth],
   cookie = ''
-let readArr = [],
+let readArr = [artBody],
   articbody = ''
-let timeArr = [],
+let timeArr = [readTimes],
   timebody = ''
 
 // 脚本部分
@@ -39,52 +39,52 @@ if ((isGetCookie = typeof $request !== 'undefined')) {
   $.msg($.name, '您未获取中青Cookie', '请进入任务中心获取')
 } else {
   !(async () => {
-    if (!$.isNode() && cookieYouth.indexOf('#') == -1) {
-      cookieArr.push(cookieYouth), readArr.push(artBody), timeArr.push(readTimes)
-    } else {
-      if (!$.isNode() && cookieYouth.indexOf('#') > -1) {
-        ;(cookieYouth = cookieYouth.split('#')),
-          (artBody = artBody.split('&')),
-          (readTimes = readTimes.split('&'))
-      } else if ($.isNode()) {
-        if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('#') > -1) {
-          cookieYouth = process.env.YOUTH_HEADER.split('#')
-        } else if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('\n') > -1) {
-          cookieYouth = process.env.YOUTH_HEADER.split('\n')
-        } else {
-          cookieYouth = [process.env.YOUTH_HEADER]
-        }
-        if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('&') > -1) {
-          artBody = process.env.YOUTH_ARTBODY.split('&')
-        } else if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('\n') > -1) {
-          artBody = process.env.YOUTH_ARTBODY.split('\n')
-        } else {
-          artBody = [process.env.YOUTH_ARTBODY]
-        }
-        if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('&') > -1) {
-          readTimes = process.env.YOUTH_TIME.split('&')
-        } else if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('\n') > -1) {
-          readTimes = process.env.YOUTH_TIME.split('\n')
-        } else {
-          readTimes = [process.env.YOUTH_TIME]
-        }
-      }
-      Object.keys(cookieYouth).forEach((item) => {
-        if (cookieYouth[item]) {
-          cookieArr.push(cookieYouth[item])
-        }
-      })
-      Object.keys(artBody).forEach((item) => {
-        if (artBody[item]) {
-          readArr.push(artBody[item])
-        }
-      })
-      Object.keys(readTimes).forEach((item) => {
-        if (readTimes[item]) {
-          timeArr.push(readTimes[item])
-        }
-      })
-    }
+    // if (!$.isNode() && cookieYouth.indexOf('#') == -1) {
+    //   cookieArr.push(cookieYouth), readArr.push(artBody), timeArr.push(readTimes)
+    // } else {
+    //   if (!$.isNode() && cookieYouth.indexOf('#') > -1) {
+    //     ;(cookieYouth = cookieYouth.split('#')),
+    //       (artBody = artBody.split('&')),
+    //       (readTimes = readTimes.split('&'))
+    //   } else if ($.isNode()) {
+    //     if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('#') > -1) {
+    //       cookieYouth = process.env.YOUTH_HEADER.split('#')
+    //     } else if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('\n') > -1) {
+    //       cookieYouth = process.env.YOUTH_HEADER.split('\n')
+    //     } else {
+    //       cookieYouth = [process.env.YOUTH_HEADER]
+    //     }
+    //     if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('&') > -1) {
+    //       artBody = process.env.YOUTH_ARTBODY.split('&')
+    //     } else if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('\n') > -1) {
+    //       artBody = process.env.YOUTH_ARTBODY.split('\n')
+    //     } else {
+    //       artBody = [process.env.YOUTH_ARTBODY]
+    //     }
+    //     if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('&') > -1) {
+    //       readTimes = process.env.YOUTH_TIME.split('&')
+    //     } else if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('\n') > -1) {
+    //       readTimes = process.env.YOUTH_TIME.split('\n')
+    //     } else {
+    //       readTimes = [process.env.YOUTH_TIME]
+    //     }
+    //   }
+    //   Object.keys(cookieYouth).forEach((item) => {
+    //     if (cookieYouth[item]) {
+    //       cookieArr.push(cookieYouth[item])
+    //     }
+    //   })
+    //   Object.keys(artBody).forEach((item) => {
+    //     if (artBody[item]) {
+    //       readArr.push(artBody[item])
+    //     }
+    //   })
+    //   Object.keys(readTimes).forEach((item) => {
+    //     if (readTimes[item]) {
+    //       timeArr.push(readTimes[item])
+    //     }
+    //   })
+    // }
     timeZone = new Date().getTimezoneOffset() / 60
     timestamp = Date.now() + (8 + timeZone) * 60 * 60 * 1000
     bjTime = new Date(timestamp).toLocaleString('zh', {

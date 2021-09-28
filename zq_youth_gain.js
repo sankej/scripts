@@ -8,15 +8,15 @@ https:\/\/ios\.baertt\.com\/v5\/Nameless\/adlickstart\.json url script-request-b
 多个请求体时用'&'号或者换行隔开"，本脚本可自动删除失效请求，请须知 ‼️
 */
 const $ = new Env('中青看点浏览赚&看看赚')
-//const notify = $.isNode() ? require('./sendNotify') : '';
+const notify = $.isNode() ? require('./sendNotify') : ''
+let startbodys = $.getdata('youth_start')
+let lookbodys = $.getdata('youth_look')
 let startArr = [],
   lookArr = []
 let gainscore = 0,
   lookscore = 0
 let StartBody = [],
   LookBody = []
-let startbodys = $.getdata('youth_start')
-let lookbodys = $.getdata('youth_look')
 if ((isGetCookie = typeof $request !== `undefined`)) {
   GetCookie()
   $.done()
@@ -31,24 +31,24 @@ if (!$.isNode() && !startbodys.indexOf('&') == -1) {
 } else if (!$.isNode() && !lookbodys.indexOf('&') == -1) {
   lookArr.push(lookbodys)
 } else {
-  if (!$.isNode() && !startbodys.indexOf('&') > -1) {
+  if ($.isNode() && !startbodys.indexOf('&') > -1) {
     StartBody = startbodys.split('&')
   }
-  if (!$.isNode() && !lookbodys.indexOf('&') > -1) {
+  if ($.isNode() && !lookbodys.indexOf('&') > -1) {
     LookBody = lookbodys.split('&')
   }
-  if ($.isNode()) {
-    if (process.env.YOUTH_START && process.env.YOUTH_START.indexOf('&') > -1) {
-      StartBody = process.env.YOUTH_START.split('&')
-    } else {
-      StartBody = [process.env.YOUTH_START]
-    }
-    if (process.env.YOUTH_LOOK && process.env.YOUTH_LOOK.indexOf('&') > -1) {
-      LookBody = process.env.YOUTH_LOOK.split('&')
-    } else {
-      LookBody = [process.env.YOUTH_LOOK]
-    }
-  }
+  // if ($.isNode()) {
+  //   if (process.env.YOUTH_START && process.env.YOUTH_START.indexOf('&') > -1) {
+  //     StartBody = process.env.YOUTH_START.split('&')
+  //   } else {
+  //     StartBody = [process.env.YOUTH_START]
+  //   }
+  //   if (process.env.YOUTH_LOOK && process.env.YOUTH_LOOK.indexOf('&') > -1) {
+  //     LookBody = process.env.YOUTH_LOOK.split('&')
+  //   } else {
+  //     LookBody = [process.env.YOUTH_LOOK]
+  //   }
+  // }
   Object.keys(StartBody).forEach((item) => {
     if (StartBody[item]) {
       startArr.push(StartBody[item])
@@ -106,7 +106,7 @@ console.log(`\n === 脚本执行 ${bjTime} ===\n`)
     )
   }
   if ($.isNode()) {
-    //await notify.sendNotify($.name，`共完成${$.index}次任务，\n共计获得${gainscore}个青豆`
+    await notify.sendNotify($.name, `共完成${$.index}次任务，\n共计获得${gainscore}个青豆`)
   }
 })()
   .catch((e) => $.logErr(e))
