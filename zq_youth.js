@@ -31,7 +31,6 @@ let readArr = [],
 let timeArr = [],
   timebody = ''
 
-console.log(cookieYouth)
 // 脚本部分
 if ((isGetCookie = typeof $request !== 'undefined')) {
   GetCookie()
@@ -39,104 +38,104 @@ if ((isGetCookie = typeof $request !== 'undefined')) {
 } else if (!$.isNode() && !cookieYouth) {
   $.msg($.name, '您未获取中青Cookie', '请进入任务中心获取')
 } else {
-  // !(async () => {
-  //   if (!$.isNode() && cookieYouth.indexOf('#') == -1) {
-  //     cookieArr.push(cookieYouth), readArr.push(artBody), timeArr.push(readTimes)
-  //   } else {
-  //     if (!$.isNode() && cookieYouth.indexOf('#') > -1) {
-  //       ;(cookieYouth = cookieYouth.split('#')),
-  //         (artBody = artBody.split('&')),
-  //         (readTimes = readTimes.split('&'))
-  //     } else if ($.isNode()) {
-  //       if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('#') > -1) {
-  //         cookieYouth = process.env.YOUTH_HEADER.split('#')
-  //       } else if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('\n') > -1) {
-  //         cookieYouth = process.env.YOUTH_HEADER.split('\n')
-  //       } else {
-  //         cookieYouth = [process.env.YOUTH_HEADER]
-  //       }
-  //       if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('&') > -1) {
-  //         artBody = process.env.YOUTH_ARTBODY.split('&')
-  //       } else if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('\n') > -1) {
-  //         artBody = process.env.YOUTH_ARTBODY.split('\n')
-  //       } else {
-  //         artBody = [process.env.YOUTH_ARTBODY]
-  //       }
-  //       if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('&') > -1) {
-  //         readTimes = process.env.YOUTH_TIME.split('&')
-  //       } else if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('\n') > -1) {
-  //         readTimes = process.env.YOUTH_TIME.split('\n')
-  //       } else {
-  //         readTimes = [process.env.YOUTH_TIME]
-  //       }
-  //     }
-  //     Object.keys(cookieYouth).forEach((item) => {
-  //       if (cookieYouth[item]) {
-  //         cookieArr.push(cookieYouth[item])
-  //       }
-  //     })
-  //     Object.keys(artBody).forEach((item) => {
-  //       if (artBody[item]) {
-  //         readArr.push(artBody[item])
-  //       }
-  //     })
-  //     Object.keys(readTimes).forEach((item) => {
-  //       if (readTimes[item]) {
-  //         timeArr.push(readTimes[item])
-  //       }
-  //     })
-  //   }
-  //   timeZone = new Date().getTimezoneOffset() / 60
-  //   timestamp = Date.now() + (8 + timeZone) * 60 * 60 * 1000
-  //   bjTime = new Date(timestamp).toLocaleString('zh', {
-  //     hour12: false,
-  //     timeZoneName: 'long',
-  //   })
-  //   $.log(`\n === 脚本执行${bjTime} === \n`)
-  //   $.log(` =========== 您共提供${cookieArr.length}个中青账号 ==========`)
-  //   if (!cookieArr[0]) {
-  //     $.msg($.name, '【提示】请先获取中青看点一cookie', '', {
-  //       'open-url': 'https://kandian.youth.cn/u/mhkjN',
-  //     })
-  //     return
-  //   }
-  //   for (let i = 0; i < cookieArr.length; i++) {
-  //     if (cookieArr[i]) {
-  //       ;(cookie = cookieArr[i]), (articbody = readArr[i]), (timebody = timeArr[i]), ($.index = i + 1)
-  //     }
-  //     myuid = cookie.match(/uid=\d+/)
-  //     await userInfo()
-  //     nick = nick ? nick : null
-  //     $.log(`\n ********** ${nick} 现金: ${cash}元 ********\n`)
-  //     await bonusTask()
-  //     await TaskCenter()
-  //     await openbox()
-  //     await getAdVideo()
-  //     await gameVideo()
-  //     await readArticle()
-  //     $.log('开始转盘抽奖任务')
-  //     for (k = 0; k < 5; k++) {
-  //       await $.wait(s * 1000)
-  //       await rotary()
-  //       if (rotaryres.status == 0) {
-  //         rotarynum = `转盘${rotaryres.msg}🎉`
-  //         break
-  //       }
-  //     }
-  //     if (rotaryres.status == 1) {
-  //       $.desc += `【转盘抽奖】 + ${rotaryscore}个青豆剩余${rotarytimes}次\n`
-  //       $.log(`转盘抽奖: 共计 + ${rotaryscore}个青豆剩余${rotarytimes}次`)
-  //       if (doubleTimes !== 0) {
-  //         $.desc += `【转盘双倍】 + ${doublerotary}青豆剩余${doubleTimes}次\n`
-  //         $.log(`转盘双倍: +${doublerotary}青豆剩余${doubleTimes}次`)
-  //       }
-  //     }
-  //     await earningsInfo()
-  //     await showmsg()
-  //   }
-  // })()
-  // .catch((e) => $.logErr(e))
-  // .finally(() => $.done())
+  !(async () => {
+    if (!$.isNode() && cookieYouth.indexOf('#') == -1) {
+      cookieArr.push(cookieYouth), readArr.push(artBody), timeArr.push(readTimes)
+    } else {
+      if (!$.isNode() && cookieYouth.indexOf('#') > -1) {
+        ;(cookieYouth = cookieYouth.split('#')),
+          (artBody = artBody.split('&')),
+          (readTimes = readTimes.split('&'))
+      } else if ($.isNode()) {
+        if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('#') > -1) {
+          cookieYouth = process.env.YOUTH_HEADER.split('#')
+        } else if (process.env.YOUTH_HEADER && process.env.YOUTH_HEADER.indexOf('\n') > -1) {
+          cookieYouth = process.env.YOUTH_HEADER.split('\n')
+        } else {
+          cookieYouth = [process.env.YOUTH_HEADER]
+        }
+        if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('&') > -1) {
+          artBody = process.env.YOUTH_ARTBODY.split('&')
+        } else if (process.env.YOUTH_ARTBODY && process.env.YOUTH_ARTBODY.indexOf('\n') > -1) {
+          artBody = process.env.YOUTH_ARTBODY.split('\n')
+        } else {
+          artBody = [process.env.YOUTH_ARTBODY]
+        }
+        if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('&') > -1) {
+          readTimes = process.env.YOUTH_TIME.split('&')
+        } else if (process.env.YOUTH_TIME && process.env.YOUTH_TIME.indexOf('\n') > -1) {
+          readTimes = process.env.YOUTH_TIME.split('\n')
+        } else {
+          readTimes = [process.env.YOUTH_TIME]
+        }
+      }
+      Object.keys(cookieYouth).forEach((item) => {
+        if (cookieYouth[item]) {
+          cookieArr.push(cookieYouth[item])
+        }
+      })
+      Object.keys(artBody).forEach((item) => {
+        if (artBody[item]) {
+          readArr.push(artBody[item])
+        }
+      })
+      Object.keys(readTimes).forEach((item) => {
+        if (readTimes[item]) {
+          timeArr.push(readTimes[item])
+        }
+      })
+    }
+    timeZone = new Date().getTimezoneOffset() / 60
+    timestamp = Date.now() + (8 + timeZone) * 60 * 60 * 1000
+    bjTime = new Date(timestamp).toLocaleString('zh', {
+      hour12: false,
+      timeZoneName: 'long',
+    })
+    $.log(`\n === 脚本执行${bjTime} === \n`)
+    $.log(` =========== 您共提供${cookieArr.length}个中青账号 ==========`)
+    if (!cookieArr[0]) {
+      $.msg($.name, '【提示】请先获取中青看点一cookie', '', {
+        'open-url': 'https://kandian.youth.cn/u/mhkjN',
+      })
+      return
+    }
+    for (let i = 0; i < cookieArr.length; i++) {
+      if (cookieArr[i]) {
+        ;(cookie = cookieArr[i]), (articbody = readArr[i]), (timebody = timeArr[i]), ($.index = i + 1)
+      }
+      myuid = cookie.match(/uid=\d+/)
+      await userInfo()
+      nick = nick ? nick : null
+      $.log(`\n ********** ${nick} 现金: ${cash}元 ********\n`)
+      await bonusTask()
+      await TaskCenter()
+      await openbox()
+      await getAdVideo()
+      await gameVideo()
+      await readArticle()
+      $.log('开始转盘抽奖任务')
+      for (k = 0; k < 5; k++) {
+        await $.wait(s * 1000)
+        await rotary()
+        if (rotaryres.status == 0) {
+          rotarynum = `转盘${rotaryres.msg}🎉`
+          break
+        }
+      }
+      if (rotaryres.status == 1) {
+        $.desc += `【转盘抽奖】 + ${rotaryscore}个青豆剩余${rotarytimes}次\n`
+        $.log(`转盘抽奖: 共计 + ${rotaryscore}个青豆剩余${rotarytimes}次`)
+        if (doubleTimes !== 0) {
+          $.desc += `【转盘双倍】 + ${doublerotary}青豆剩余${doubleTimes}次\n`
+          $.log(`转盘双倍: +${doublerotary}青豆剩余${doubleTimes}次`)
+        }
+      }
+      await earningsInfo()
+      await showmsg()
+    }
+  })()
+    .catch((e) => $.logErr(e))
+    .finally(() => $.done())
 }
 function kdHost(api, body) {
   return {
