@@ -8,6 +8,7 @@ PT签到
 const got = require('got')
 const notify = require('./sendNotify').sendNotify
 
+const scriptName = 'PT签到'
 const headers = {
   accept: '*/*',
   'accept-encoding': 'gzip, deflate, br',
@@ -38,7 +39,7 @@ const genMsg = (name, msg) => `站点: ${name}, msg: ${msg}`
 
 const signin = async ({ name, url, method, body, outputFn }) => {
   try {
-    const cookie = process.env[name]
+    const cookie = process.env[`${name}_cookie`]
 
     if (!cookie) return genMsg(name, 'cookie不存在')
 
