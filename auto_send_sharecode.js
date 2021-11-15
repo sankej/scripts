@@ -16,6 +16,8 @@ const apiId = +process.env[apiIdKey]
 const apiHash = process.env[apiHashKey]
 const storeSession = new StoreSession(apiId)
 
+let bindList = fs.readFileSync('bindList.txt', 'utf8')
+bindList = bindList.split('\n')
 ;(async () => {
   try {
     console.log('登入Telegram...')
@@ -35,8 +37,14 @@ const storeSession = new StoreSession(apiId)
 
     const shareCodes = getShareCode()
 
+    for (pt of bindList) {
+      await client.sendMessage('JDShareCodebot', { message: `/bind ${pt}` })
+      await sleep(3)
+    }
+
     for (code of shareCodes) {
       await client.sendMessage('JD_ShareCode_Bot', { message: code })
+      await client.sendMessage('JDShareCodebot', { message: code })
       await sleep(3)
     }
 
