@@ -7,6 +7,7 @@ cron 0 21 * * 6 auto_send_sharecode.js
 // const $ = new Env('自动加入助力池')
 const { TelegramClient } = require('telegram')
 const { StoreSession } = require('telegram/sessions')
+const fs = require('fs')
 const input = require('input') // npm i input
 
 const apiIdKey = 'TELEGRAM_API_ID'
