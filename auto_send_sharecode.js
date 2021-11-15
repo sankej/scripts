@@ -65,7 +65,7 @@ bindList = bindList.split('\n')
 
 function getShareCode() {
   const child = require('child_process')
-  const res = child.execSync('task task zero205_JD_tencent_scf_main/jd_get_share_code.js now', {
+  const res = child.execSync('task zero205_JD_tencent_scf_main/jd_get_share_code.js now', {
     shell: '/bin/bash',
   })
   return res.toString().match(new RegExp('^/.*', 'gm'))
