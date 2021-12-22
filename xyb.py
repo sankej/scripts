@@ -26,11 +26,9 @@ urls = {
     'status': 'https://xcx.xybsyw.com/student/clock/GetPlan!detail.action'
 }
 
-
 host1 = 'xcx.xybsyw.com'
 host2 = 'app.xybsyw.com'
 all_msg = ''
-
 
 def getTimeStr():
     utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -45,7 +43,7 @@ def str2md5(str):
 def log(content):
     msg = getTimeStr() + ' ' + str(content)
     print(msg)
-    all_msg += msg
+    all_msg += msg + '\n'
     sys.stdout.flush()
 
 
@@ -77,7 +75,7 @@ def login(userInfo):
     headers = getHeader(host1)
     url = urls['login']
     resp = requests.post(url=url, headers=headers, data=data).json()
-    all_if('成功' in resp['msg']): = ''
+    if('成功' in resp['msg']):
         ret = {
             'sessionId': resp['data']['sessionId'],
             'loginerId': resp['data']['loginerId']
@@ -86,7 +84,7 @@ def login(userInfo):
         log(f"loginerId:{resp['data']['loginerId']}")
         return ret
     else:
-        all_log(resp['msg']) = ''
+        log(resp['msg'])
         exit(-1)
 
 
@@ -96,7 +94,7 @@ def getUsername(sessionId):
     headers['cookie'] = f'JSESSIONID={sessionId}'
     url = urls['loadAccount']
     resp = requests.post(url=url, headers=headers).json()
-    all_if('成功' in resp['msg']): = ''
+    if('成功' in resp['msg']):
         ret = resp['data']['loginer']
         log(f"姓名:{ret}")
         return ret
@@ -281,7 +279,7 @@ def signHandler(userInfo):
         # sendQmsgChan(userName+'签到成功')
         log('校友邦实习任务签到成功\n\n')
     else:
-        # sendQmsgChan(userName+'签到失败')
+        sendQmsgChan(userName+'签到失败')
         log('校友邦实习任务签到失败!')
 
 
