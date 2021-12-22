@@ -43,9 +43,9 @@ def str2md5(str):
 
 
 def log(content):
-	  msg = getTimeStr() + ' ' + str(content)
+    msg = getTimeStr() + ' ' + str(content)
     print(msg)
-		all_msg += msg
+    all_msg += msg
     sys.stdout.flush()
 
 
