@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 import time
 import hashlib
 
-from notify_mtr import send
+from notify import send
 
 urls = {
     # 'login': 'https://xcx.xybsyw.com/login/login!wx.action',
@@ -41,6 +41,7 @@ def str2md5(str):
 
 
 def log(content):
+    global all_msg
     msg = getTimeStr() + ' ' + str(content)
     print(msg)
     all_msg += msg + '\n'
@@ -295,4 +296,4 @@ if __name__ == '__main__':
     for user in users['user']:
         signHandler(user)
         time.sleep(1.5)
-		send("校友邦", all_msg)
+    send('校友邦', all_msg)
