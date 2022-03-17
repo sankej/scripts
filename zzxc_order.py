@@ -4,10 +4,11 @@ import time
 import requests
 import urllib3
 import json
+import datetime
+import sys
 
 from notify import send
 from zzxc_utils import aes_encrypt_base64, get_str_sha1_secret_str, Timer
-import datetime
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -141,7 +142,8 @@ class ZzxcDemo(object):
                 str(enterIdList),
                 self.ppTokenList,
             )
-            raise Exception(logPrefix, "抢票成功")
+            print(logPrefix, "抢票成功")
+            sys.exit(0)
 
 
 def wx_notice(content, enterIdList, sckeyList):
