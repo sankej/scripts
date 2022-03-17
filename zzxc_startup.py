@@ -1,6 +1,9 @@
 # import threading
-from multiprocessing import Process
+import os
+import signal
 import json
+
+from multiprocessing import Process
 from zzxc_order import start
 
 profilePath = "/ql/config/zzxc.json"
@@ -12,8 +15,12 @@ def readProfileInfo():
     fp.close()
     return users
 
+def term(sig_num, addtion):
+    print(f"current pid is {os.getpid()}, group id is {os.getpgrp()}")
+    os.killpg(os.getpgid(os.getpid()), signal.SIGKILL)
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGTERM, term)
     processList = []
     profile = readProfileInfo()
 
@@ -32,7 +39,9 @@ if __name__ == "__main__":
             )
             processList.append(p)
             # p.setDaemon(True)
+            p.daemon = True
             p.start()
+
     for p in processList:
         p.join()
 

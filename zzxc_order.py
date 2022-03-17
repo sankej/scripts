@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: UTF-8 -*-
 import time
 import requests
 import urllib3
@@ -11,6 +9,27 @@ from notify import send
 from zzxc_utils import aes_encrypt_base64, get_str_sha1_secret_str, Timer
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+commonHeaders = {
+    "Connection": "keep-alive",
+    "Accept": "application/json, text/plain, */*",
+    "Origin": "https://m.zhengzai.tv",
+    "Referer": "https://m.zhengzai.tv/",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36",
+    "sec-ch-ua": '"Google Chrome";v="93", " Not;A Brand";v="99", "Chromium";v="93"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Windows"',
+    "Sec-Fetch-Site": "same-site",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Dest": "empty",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "zh-CN,zh;q=0.9",
+}
+apis = {
+    "getEnterIdList": "https://adam.zhengzai.tv/adam/enters/list",
+    "getTicketData": "https://kylin.zhengzai.tv/kylin/performance/partner",
+    "createOrder": "https://order.zhengzai.tv/order/order/pre",
+}
 
 
 class ZzxcDemo(object):
@@ -24,101 +43,68 @@ class ZzxcDemo(object):
         pass
 
     def getEnterIdList(self):
-        url = "https://adam.zhengzai.tv/adam/enters/list"
-        headers = {
+        headers = commonHeaders | {
             "Host": "adam.zhengzai.tv",
-            "Connection": "keep-alive",
-            "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
-            "Accept": "application/json, text/plain, */*",
             "Authorization": self.token,
-            "sec-ch-ua-mobile": "?0",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36",
-            "sec-ch-ua-platform": '"Windows"',
-            "Origin": "https://m.zhengzai.tv",
-            "Sec-Fetch-Site": "same-site",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Dest": "empty",
-            "Referer": "https://m.zhengzai.tv/",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-CN,zh;q=0.9",
         }
         cookies = {}
-        html = self.session.get(url, headers=headers, verify=False, cookies=cookies)
-
         enterIdList = []
+
+        html = self.session.get(
+            apis.get("getEnterIdList"), headers=headers, verify=False, cookies=cookies
+        )
+
         for i in html.json().get("data"):
             enterIdList.append(i.get("entersId"))
+
         return '","'.join(enterIdList[: self.ticketNums])
 
     def genTicketData(self):
-        url = f"https://kylin.zhengzai.tv/kylin/performance/partner/{self.performanceId}?isAgent=0"
-        headers = {
+        headers = commonHeaders | {
             "Host": "kylin.zhengzai.tv",
-            "Connection": "keep-alive",
-            "sec-ch-ua": '"Google Chrome";v="93", " Not;A Brand";v="99", "Chromium";v="93"',
-            "sec-ch-ua-mobile": "?0",
             "Authorization": self.token,
-            "Accept": "application/json, text/plain, */*",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36",
             "source": "H5",
-            "sec-ch-ua-platform": '"Windows"',
             "version": "1.1",
-            "Origin": "https://m.zhengzai.tv",
-            "Sec-Fetch-Site": "same-site",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Dest": "empty",
-            "Referer": "https://m.zhengzai.tv/",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-CN,zh;q=0.9",
         }
-        html = self.session.get(url, headers=headers, verify=False, cookies={})
-
-        showData = html.json().get("data")
-        ticketList = showData.get("ticketTimesList")[0].get("ticketList")
         allData = []
 
-        for single_ticket in ticketList:
-            base_result = {
-                "title": single_ticket.get("title"),
-                "ticketsId": single_ticket.get("ticketsId"),
-                "isElectronic": single_ticket.get("isElectronic"),
-                "isExpress": single_ticket.get("isExpress"),
-                "expressType": single_ticket.get("expressType"),
-                "timeId": single_ticket.get("timeId"),
+        html = self.session.get(
+            f"{apis.get('getTicketData')}/{self.performanceId}?isAgent=0",
+            headers=headers,
+            verify=False,
+            cookies={},
+        )
+        showData = html.json().get("data")
+        ticketList = showData.get("ticketTimesList")[0].get("ticketList")
+
+        for singleTicket in ticketList:
+            baseResult = {
+                "title": singleTicket.get("title"),
+                "ticketsId": singleTicket.get("ticketsId"),
+                "isElectronic": singleTicket.get("isElectronic"),
+                "isExpress": singleTicket.get("isExpress"),
+                "expressType": singleTicket.get("expressType"),
+                "timeId": singleTicket.get("timeId"),
                 # status6能买  售罄 t.status=8  lackRegister!=1
-                "isLackRegister": single_ticket.get("isLackRegister"),
+                "isLackRegister": singleTicket.get("isLackRegister"),
             }
-            allData.append(base_result)
+            allData.append(baseResult)
 
         ticketData = allData[self.ticketType]
         return ticketData
 
     def create_order(self, ticketData, enterIdList, logPrefix):
-        url = "https://order.zhengzai.tv/order/order/pre"
-        headers = {
+        headers = commonHeaders | {
             "Host": "order.zhengzai.tv",
-            "Connection": "keep-alive",
             "Content-Length": "632",
             "Pragma": "no-cache",
             "Cache-Control": "no-cache",
-            "sec-ch-ua": '"Google Chrome";v="93", " Not;A Brand";v="99", "Chromium";v="93"',
-            "version": "1.1",
-            "sec-ch-ua-mobile": "?0",
-            "Authorization": self.token,
             "Content-Type": "application/json;charset=UTF-8",
-            "Accept": "application/json, text/plain, */*",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36",
-            "sec-ch-ua-platform": '"Windows"',
+            "version": "1.1",
+            "Authorization": self.token,
             "source": "H5",
-            "Origin": "https://m.zhengzai.tv",
-            "Sec-Fetch-Site": "same-site",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Dest": "empty",
-            "Referer": "https://m.zhengzai.tv/",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-CN,zh;q=0.9",
         }
-        text = (
+        data = (
             f'{{"number":{self.ticketNums},"ticketId":"{ticketData.get("ticketsId")}","isElectronic":{ticketData.get("isElectronic")},"enterIdList":["{str(enterIdList)}"],'
             f'"isExpress":0,"deviceFrom":"wap","actual":199,"performanceId":"{self.performanceId}",'
             f'"timeId":"{ticketData.get("timeId")}",'
@@ -126,14 +112,19 @@ class ZzxcDemo(object):
             f'"showUrl":"https://m.zhengzai.tv/#/pay/status?order_type=ticket&order_id=",'
             f'"expressType":{ticketData.get("expressType")},"agentId":0,"payType":"alipay"}}'
         )
-        encryptedData = aes_encrypt_base64(text=text)
+        encryptedData = aes_encrypt_base64(text=data)
         timeStamp = int(time.time() * 1000)
         sign = get_str_sha1_secret_str(
             encryptedData + str(timeStamp) + "QGZUanpSaSy9DEPQFVULJQ=="
         )
         data = {"sign": sign, "encryptedData": encryptedData, "timestamp": timeStamp}
+
         html = self.session.post(
-            url, headers=headers, verify=False, cookies={}, data=json.dumps(data)
+            apis.get("createOrder"),
+            headers=headers,
+            verify=False,
+            cookies={},
+            data=json.dumps(data),
         )
 
         if "https://openapi.alipay.com/gateway" in html.text:
@@ -148,10 +139,16 @@ class ZzxcDemo(object):
 
 def wx_notice(content, enterIdList, sckeyList):
     send(f"正在现场 --- {enterIdList}抢票成功", content)
+
     for key in sckeyList:
         url = "http://www.pushplus.plus/send"
-        data = {"token": key, "title": f"{enterIdList}抢票成功", "content": content, "template": "html"}
-        requests.post(url = url, data=json.dumps(data), timeout = 10)
+        data = {
+            "token": key,
+            "title": f"{enterIdList}抢票成功",
+            "content": content,
+            "template": "html",
+        }
+        requests.post(url=url, data=json.dumps(data), timeout=10)
 
 
 def start(token, performanceId, ticketNums, ticketType, startTime, ppTokenList):

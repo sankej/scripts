@@ -1,12 +1,12 @@
 import datetime
 import time
+import random
+import json
+import base64
 
 from Crypto.Cipher import AES
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import algorithms
-import random
-import json
-import base64
 
 # key的类型为什么就传什么  parse 为 将string  转为 object {}
 # b64decode 解码  将 string'MTExMTEx'转为  b'111111'
