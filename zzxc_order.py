@@ -13,13 +13,13 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class ZzxcDemo(object):
-    def __init__(self, token, performanceId, ticketNums, ticketType, sckeyList):
+    def __init__(self, token, performanceId, ticketNums, ticketType, ppTokenList):
         self.session = requests.session()
         self.token = token
         self.performanceId = performanceId
         self.ticketNums = ticketNums
         self.ticketType = ticketType
-        self.sckeyList = sckeyList
+        self.ppTokenList = ppTokenList
         pass
 
     def getEnterIdList(self):
@@ -139,7 +139,7 @@ class ZzxcDemo(object):
             wx_notice(
                 f"[start][{str(datetime.datetime.now())}]" + html.text,
                 str(enterIdList),
-                self.sckeyList,
+                self.ppTokenList,
             )
             raise Exception(logPrefix, "抢票成功")
 
@@ -147,13 +147,13 @@ class ZzxcDemo(object):
 def wx_notice(content, enterIdList, sckeyList):
     send(f"正在现场 --- {enterIdList}抢票成功", content)
     for key in sckeyList:
-        url = f"https://sctapi.ftqq.com/{key}.send"
-        params = {"text": f"{enterIdList}抢票成功", "desp": content}
-        html = requests.get(url, params=params)
+        url = "http://www.pushplus.plus/send"
+        data = {"token": key, "title": f"{enterIdList}抢票成功", "content": content, "template": "html"}
+        requests.post(url = url, data=json.dumps(data), timeout = 10)
 
 
-def start(token, performanceId, ticketNums, ticketType, startTime, sckeyList):
-    ob = ZzxcDemo(token, performanceId, ticketNums, ticketType, sckeyList)
+def start(token, performanceId, ticketNums, ticketType, startTime, ppTokenList):
+    ob = ZzxcDemo(token, performanceId, ticketNums, ticketType, ppTokenList)
     ticketData = ob.genTicketData()
     enterIdList = ob.getEnterIdList()
     logPrefix = f"({enterIdList} --- {ticketData['title']}) ---"
