@@ -150,7 +150,6 @@ def wx_notice(content, enterIdList, sckeyList):
         url = f"https://sctapi.ftqq.com/{key}.send"
         params = {"text": f"{enterIdList}抢票成功", "desp": content}
         html = requests.get(url, params=params)
-        print(f"[方糖]{key}---{content}--res:{html.text}")
 
 
 def start(token, performanceId, ticketNums, ticketType, startTime, sckeyList):
