@@ -1,12 +1,13 @@
 import datetime
 import time
-import random
-import json
-import base64
+import re
 
 from Crypto.Cipher import AES
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import algorithms
+import random
+import json
+import base64
 
 # key的类型为什么就传什么  parse 为 将string  转为 object {}
 # b64decode 解码  将 string'MTExMTEx'转为  b'111111'
@@ -111,6 +112,14 @@ if __name__ == "__main__":
     text = '{"number":1,"ticketId":"140952523996979207837759","isElectronic":1,"isExpress":0,"deviceFrom":"wap","actual":188,"performanceId":"140384366355619843241207","timeId":"140935837336002567495779","returnUrl":"https://m.zhengzai.tv/#/pay/status?order_type=ticket&order_id=","showUrl":"https://m.zhengzai.tv/#/pay/status?order_type=ticket&order_id=","expressType":2,"agentId":0,"payType":"alipay"}'
     s = aes_encrypt_base64(text=text)
     print(s)
+
+
+def len_zh(data):
+    temp = re.findall("[^a-zA-Z0-9.]+", data)
+    count = 0
+    for i in temp:
+        count += len(i)
+    return count
 
 
 class Timer(object):
