@@ -5,8 +5,7 @@ import json
 import datetime
 import sys
 
-from notify import send
-from zzxc_utils import aes_encrypt_base64, get_str_sha1_secret_str, Timer
+from zzxc_utils import aes_encrypt_base64, get_str_sha1_secret_str, len_zh, Timer
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -29,17 +28,29 @@ apis = {
     "getEnterIdList": "https://adam.zhengzai.tv/adam/enters/list",
     "getTicketData": "https://kylin.zhengzai.tv/kylin/performance/partner",
     "createOrder": "https://order.zhengzai.tv/order/order/pre",
+    "getOrderList": "https://kylin.zhengzai.tv/kylin/order/list/unLimit?page=1&size=40",
 }
 
 
 class ZzxcDemo(object):
-    def __init__(self, token, performanceId, ticketNums, ticketType, ppTokenList):
+    def __init__(
+        self,
+        token,
+        performanceId,
+        ticketNums,
+        ticketType,
+        ppTokenList,
+        barkTokenList,
+        userName,
+    ):
         self.session = requests.session()
         self.token = token
         self.performanceId = performanceId
         self.ticketNums = ticketNums
         self.ticketType = ticketType
         self.ppTokenList = ppTokenList
+        self.barkTokenList = barkTokenList
+        self.userName = userName
         pass
 
     def getEnterIdList(self):
@@ -47,15 +58,18 @@ class ZzxcDemo(object):
             "Host": "adam.zhengzai.tv",
             "Authorization": self.token,
         }
-        cookies = {}
         enterIdList = []
 
         html = self.session.get(
-            apis.get("getEnterIdList"), headers=headers, verify=False, cookies=cookies
+            apis.get("getEnterIdList"), headers=headers, verify=False, cookies={}
         )
 
-        for i in html.json().get("data"):
-            enterIdList.append(i.get("entersId"))
+        try:
+            for i in html.json().get("data"):
+                enterIdList.append(i.get("entersId"))
+        except:
+            print(f"{self.userName} 没添加观影人")
+            sys.exit(1)
 
         return '","'.join(enterIdList[: self.ticketNums])
 
@@ -66,7 +80,7 @@ class ZzxcDemo(object):
             "source": "H5",
             "version": "1.1",
         }
-        allData = []
+        allTicketData = []
 
         html = self.session.get(
             f"{apis.get('getTicketData')}/{self.performanceId}?isAgent=0",
@@ -79,6 +93,7 @@ class ZzxcDemo(object):
 
         for singleTicket in ticketList:
             baseResult = {
+                "performanceName": showData.get("performancesInfo").get("title"),
                 "title": singleTicket.get("title"),
                 "ticketsId": singleTicket.get("ticketsId"),
                 "isElectronic": singleTicket.get("isElectronic"),
@@ -88,10 +103,33 @@ class ZzxcDemo(object):
                 # status6能买  售罄 t.status=8  lackRegister!=1
                 "isLackRegister": singleTicket.get("isLackRegister"),
             }
-            allData.append(baseResult)
+            allTicketData.append(baseResult)
 
-        ticketData = allData[self.ticketType]
+        ticketData = allTicketData[self.ticketType]
         return ticketData
+
+    def getOrderList(self):
+        headers = commonHeaders | {
+            "Host": "kylin.zhengzai.tv",
+            "Authorization": self.token,
+            "source": "H5",
+            "version": "1.1",
+        }
+
+        html = self.session.get(
+            apis.get("getOrderList"), headers=headers, verify=False, cookies={}
+        )
+
+        return html.json().get("data").get("list")
+
+    def checkIsOrder(self, orderList):
+        for order in orderList:
+            if (
+                order.get("performanceId") == self.performanceId
+                and order.get("status") == 1
+            ):
+                return True
+        return False
 
     def create_order(self, ticketData, enterIdList, logPrefix):
         headers = commonHeaders | {
@@ -128,34 +166,108 @@ class ZzxcDemo(object):
         )
 
         if "https://openapi.alipay.com/gateway" in html.text:
-            wx_notice(
-                f"[start][{str(datetime.datetime.now())}]" + html.text,
-                str(enterIdList),
+            content = html.json() | {"time": f"[start][{str(datetime.datetime.now())}]"}
+            wechatNotice(
+                json.dumps(content),
                 self.ppTokenList,
+                self.barkTokenList,
+                logPrefix,
             )
             print(logPrefix, "抢票成功")
             sys.exit(0)
+        else:
+            print(logPrefix, html.json().get("message"))
 
 
-def wx_notice(content, enterIdList, sckeyList):
-    send(f"正在现场 --- {enterIdList}抢票成功", content)
-
-    for key in sckeyList:
+def wechatNotice(content, ppTokenList, barkTokenList, logPrefix):
+    title = f"{logPrefix} 抢票成功"
+    for token in ppTokenList:
         url = "http://www.pushplus.plus/send"
         data = {
-            "token": key,
-            "title": f"{enterIdList}抢票成功",
+            "token": token,
+            "title": title,
             "content": content,
-            "template": "html",
+            "template": "json",
         }
         requests.post(url=url, data=json.dumps(data), timeout=10)
+    for token in barkTokenList:
+        requests.post(
+            url="https://bark-zza.tk/push",
+            headers={
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            data=json.dumps(
+                {
+                    "body": "success",
+                    "device_key": token,
+                    "title": title,
+                    "category": "ZZXC",
+                    "group": "ZZXC",
+                }
+            ),
+        )
 
 
-def start(token, performanceId, ticketNums, ticketType, startTime, ppTokenList):
-    ob = ZzxcDemo(token, performanceId, ticketNums, ticketType, ppTokenList)
+def judgeStatus(t):
+    return [
+        "等待付款",
+        "订单成功",
+        "订单取消, 超时未支付/用户主动取消",
+        "订单退款中",
+        "已退款",
+        "订单取消, 超时未支付/用户主动取消",
+    ][t]
+
+
+def showOrderList(orderList, logPrefix):
+    if len(orderList) == 0:
+        print(logPrefix, "没有订单")
+        return
+
+    print(logPrefix, "订单列表")
+
+    for order in orderList:
+        print(
+            f'演出名字: {order.get("performanceTitle")}\n'
+            f'演出ID: {order.get("performanceId")}\n'
+            f'订单状态: {judgeStatus(int(order.get("status")))}\n'
+            f'订单数量: {order.get("number")}\n'
+            f'订单类型: {order.get("getTicketType")}\n'
+        )
+
+
+def start(
+    token,
+    performanceId,
+    ticketNums,
+    ticketType,
+    startTime,
+    ppTokenList,
+    barkTokenList,
+    userName,
+    mode,
+):
+    ob = ZzxcDemo(
+        token,
+        performanceId,
+        ticketNums,
+        ticketType,
+        ppTokenList,
+        barkTokenList,
+        userName,
+    )
     ticketData = ob.genTicketData()
     enterIdList = ob.getEnterIdList()
-    logPrefix = f"({enterIdList} --- {ticketData['title']}) ---"
+    logPrefix = f"{userName.ljust(10 - len_zh(userName))} --- {ticketData.get('performanceName')}[{ticketData.get('title')}] ---"
+    orderList = ob.getOrderList()
+
+    if mode == "show":
+        showOrderList(orderList, logPrefix)
+        return
+
+    if ob.checkIsOrder(orderList):
+        print(logPrefix, "已经购买, 取消运行")
+        sys.exit(0)
 
     print(logPrefix, "start")
     Timer().start(startTime, 0, logPrefix)
