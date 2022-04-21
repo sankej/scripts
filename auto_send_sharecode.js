@@ -49,12 +49,6 @@ bindList = bindList.split('\n')
       await sleep(3)
     }
 
-    // const jobs = shareCodes.map(async (code) => {
-    //   await client.sendMessage('zza_jd_notify_bot', { message: code })
-    // })
-
-    // await Promise.all(jobs)
-
     console.log('发送助力码完成')
     process.exit(0)
   } catch (error) {
