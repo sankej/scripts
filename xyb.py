@@ -286,7 +286,7 @@ def signHandler(userInfo):
 
 # 读取user.json
 def readJsonInfo():
-    with open('/ql/config/xyb.json', 'r', encoding='utf8') as fp:
+    with open('/ql/data/config/xyb.json', 'r', encoding='utf8') as fp:
         users = json.load(fp)
     fp.close()
     return users

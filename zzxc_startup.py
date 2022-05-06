@@ -7,7 +7,7 @@ import argparse
 from multiprocessing import Process
 from zzxc_order import start
 
-profilePath = "/ql/config/zzxc.json"
+profilePath = "/ql/data/config/zzxc.json"
 parser = argparse.ArgumentParser(description="Test for argparse")
 parser.add_argument("--mode", "-m", help="运行模式，默认为抢票, show为查询订单", default="order")
 args = parser.parse_args()
