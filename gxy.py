@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+cron: 0 10 * * *
+new Env('gxy');
+"""
+
 import datetime
 import json
 import os
