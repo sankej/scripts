@@ -29,57 +29,57 @@ if (!lk.isExecComm) {
     getCookie()
     lk.done()
   } else {
-    lk.boxJsJsonBuilder(
-      {
-        icons: [
-          'https://raw.githubusercontent.com/lowking/Scripts/master/doc/icon/bingPoint.png',
-          'https://raw.githubusercontent.com/lowking/Scripts/master/doc/icon/bingPoint.png',
-        ],
-        settings: [
-          {
-            id: bingPointCookieKey,
-            name: 'Bing积分cookie',
-            val: '',
-            type: 'text',
-            desc: 'Bing积分cookie',
-          },
-          {
-            id: bingSearchCookieMobileKey,
-            name: 'Bing每日搜索cookie(移动端)',
-            val: '',
-            type: 'text',
-            desc: '请使用手机打开https://cn.bing.com/search?q=test抓去对应请求的cookie',
-          },
-          {
-            id: searchMobileAmountKey,
-            name: 'Bing每日执行搜索(移动端)次数',
-            val: 10,
-            type: 'number',
-            desc: 'Bing每日执行搜索(移动端)次数',
-          },
-          {
-            id: bingSearchCookieKey,
-            name: 'Bing每日搜索cookie(PC)',
-            val: '',
-            type: 'text',
-            desc: '请使用电脑打开https://cn.bing.com/search?q=test抓去对应请求的cookie',
-          },
-          {
-            id: searchPcAmountKey,
-            name: 'Bing每日执行搜索(PC)次数',
-            val: 10,
-            type: 'number',
-            desc: 'Bing每日执行搜索(PC)次数',
-          },
-        ],
-        keys: [bingPointCookieKey],
-      },
-      {
-        script_url: 'https://github.com/lowking/Scripts/blob/master/bing/bingPoint.js',
-        author: '@lowking',
-        repo: 'https://github.com/lowking/Scripts',
-      },
-    )
+    // lk.boxJsJsonBuilder(
+    //   {
+    //     icons: [
+    //       'https://raw.githubusercontent.com/lowking/Scripts/master/doc/icon/bingPoint.png',
+    //       'https://raw.githubusercontent.com/lowking/Scripts/master/doc/icon/bingPoint.png',
+    //     ],
+    //     settings: [
+    //       {
+    //         id: bingPointCookieKey,
+    //         name: 'Bing积分cookie',
+    //         val: '',
+    //         type: 'text',
+    //         desc: 'Bing积分cookie',
+    //       },
+    //       {
+    //         id: bingSearchCookieMobileKey,
+    //         name: 'Bing每日搜索cookie(移动端)',
+    //         val: '',
+    //         type: 'text',
+    //         desc: '请使用手机打开https://cn.bing.com/search?q=test抓去对应请求的cookie',
+    //       },
+    //       {
+    //         id: searchMobileAmountKey,
+    //         name: 'Bing每日执行搜索(移动端)次数',
+    //         val: 10,
+    //         type: 'number',
+    //         desc: 'Bing每日执行搜索(移动端)次数',
+    //       },
+    //       {
+    //         id: bingSearchCookieKey,
+    //         name: 'Bing每日搜索cookie(PC)',
+    //         val: '',
+    //         type: 'text',
+    //         desc: '请使用电脑打开https://cn.bing.com/search?q=test抓去对应请求的cookie',
+    //       },
+    //       {
+    //         id: searchPcAmountKey,
+    //         name: 'Bing每日执行搜索(PC)次数',
+    //         val: 10,
+    //         type: 'number',
+    //         desc: 'Bing每日执行搜索(PC)次数',
+    //       },
+    //     ],
+    //     keys: [bingPointCookieKey],
+    //   },
+    //   {
+    //     script_url: 'https://github.com/lowking/Scripts/blob/master/bing/bingPoint.js',
+    //     author: '@lowking',
+    //     repo: 'https://github.com/lowking/Scripts',
+    //   },
+    // )
     all()
   }
 }
